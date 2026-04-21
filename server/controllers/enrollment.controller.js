@@ -10,10 +10,13 @@ const requestEnrollment = asyncHandler(async (req, res) => {
   );
 
   // Notify ALL admins in real-time
-  getIO().to("adminRoom").emit("newEnrollmentRequest", {
-    enrollment,
-    studentName: req.user.name,
-  });
+  getIO()
+    .to("adminRoom")
+    .emit("newEnrollmentRequest", {
+      enrollment,
+      studentName: req.user.name,
+      message: `${req.user.name} requested to enroll in ${enrollment.course.title}`,
+    });
 
   return res.status(201).json({ msg: "Enrollment request sent!", enrollment });
 });

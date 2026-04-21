@@ -10,9 +10,10 @@ const initialState = {
 
 export const enroll = createAsyncThunk(
   "enrollment/enroll",
-  async (courseId, { rejectWithValue }) => {
+  async (courseId, { rejectWithValue, dispatch }) => {
     try {
       const response = await enrollmentAPI.enroll(courseId);
+      dispatch(getMyEnrollments());
       return response;
     } catch (error) {
       return rejectWithValue(
@@ -52,13 +53,18 @@ export const getPendingRequests = createAsyncThunk(
 
 export const approveOrReject = createAsyncThunk(
   "enrollment/approveOrReject",
-  async ({ enrollmentId, status, rejectionReason }, { rejectWithValue }) => {
+  async (
+    { enrollmentId, status, rejectionReason },
+    { rejectWithValue, dispatch },
+  ) => {
     try {
       const response = await enrollmentAPI.approveOrReject(
         enrollmentId,
         status,
         rejectionReason,
       );
+      dispatch(getMyEnrollments());
+      dispatch(getPendingRequests());
       return response;
     } catch (error) {
       return rejectWithValue(
@@ -90,7 +96,7 @@ const enrollmentSlice = createSlice({
       })
       .addCase(getMyEnrollments.fulfilled, (state, action) => {
         state.loading = false;
-        state.enrollments = action.payload;
+        state.enrollments = action.payload.enrollments;
       })
       .addCase(getMyEnrollments.rejected, (state, action) => {
         state.loading = false;

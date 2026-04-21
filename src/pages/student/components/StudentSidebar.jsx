@@ -17,6 +17,11 @@ const StudentSidebar = () => {
       path: "/student/all-courses",
       icon: <BookOpen className="w-5 h-5" />,
     },
+    {
+      title: "My Enrollments",
+      path: "/student/my-enrollments",
+      icon: <GraduationCap className="w-5 h-5" />,
+    },
   ];
 
   return (
@@ -32,7 +37,7 @@ const StudentSidebar = () => {
                 "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                 isActive
                   ? "bg-gray-100 text-gray-900"
-                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50",
               )}
             >
               {item.icon}

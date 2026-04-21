@@ -11,10 +11,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Search, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { enroll } from "@/Store/features/enrollment/enrollment.slice";
+import {
+  enroll,
+  getMyEnrollments,
+} from "@/Store/features/enrollment/enrollment.slice";
+import { toast } from "sonner";
 
 const AllCourses = () => {
   const { courses, loading } = useSelector((state) => state.course);
+  const { enrollments } = useSelector((state) => state.enrollment);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -27,6 +32,24 @@ const AllCourses = () => {
       course.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       course.description?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  const handleEnroll = async (courseId) => {
+    const toastId = toast.loading("Sending enrollment request...");
+    try {
+      const result = await dispatch(enroll(courseId)).unwrap();
+      toast.success(result?.msg || "Enrollment request sent successfully!", {
+        id: toastId,
+      });
+      dispatch(getMyEnrollments());
+    } catch (error) {
+      toast.error(
+        typeof error === "string"
+          ? error
+          : error?.message || "Operation failed",
+        { id: toastId },
+      );
+    }
+  };
 
   return (
     <div className="space-y-8 max-w-7xl">
@@ -90,12 +113,23 @@ const AllCourses = () => {
                 </CardDescription>
               </CardHeader>
               <CardFooter className="p-5 pt-0 mt-auto">
-                <Button
-                  onClick={() => dispatch(enroll(course._id))}
-                  className="w-full bg-gray-900 text-white hover:bg-gray-800 font-medium h-10"
-                >
-                  Enroll Now
-                </Button>
+                {enrollments?.some(
+                  (enrollment) => enrollment?.course?._id === course?._id,
+                ) ? (
+                  <Button
+                    disabled
+                    className="w-full bg-gray-900 text-white hover:bg-gray-800 font-medium h-10"
+                  >
+                    Enrolled
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => handleEnroll(course._id)}
+                    className="w-full bg-gray-900 text-white hover:bg-gray-800 font-medium h-10"
+                  >
+                    Enroll Now
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           ))}

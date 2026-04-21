@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Package, BookOpen, Users } from "lucide-react";
+import { LayoutDashboard, Package, BookOpen, Users, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const AdminSidebar = () => {
@@ -23,10 +23,15 @@ const AdminSidebar = () => {
       icon: <BookOpen className="w-5 h-5" />,
     },
     {
-      title: "Student Enrollments",
+      title: "Enrollments Requests",
       path: "/admin/student-enrollments",
+      icon: <User className="w-5 h-5" />,
+    },
+    {
+      title: "All Students",
+      path: "/admin/all-students",
       icon: <Users className="w-5 h-5" />,
-    }
+    },
   ];
 
   return (
@@ -42,7 +47,7 @@ const AdminSidebar = () => {
                 "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                 isActive
                   ? "bg-gray-100 text-gray-900"
-                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-50",
               )}
             >
               {item.icon}

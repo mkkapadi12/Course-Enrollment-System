@@ -10,11 +10,19 @@ const initSocket = (httpServer) => {
   io.on("connection", (socket) => {
     console.log("Client connected:", socket.id);
 
+    // Student joins their personal room (for enrollment updates)
     socket.on("join", (userId) => {
       socket.join(userId);
-      console.log(`User ${userId} joined their room`);
+      console.log(`User ${userId} joined personal room`);
     });
 
+    // Student joins shared student room (for new course notifications)
+    socket.on("joinStudent", () => {
+      socket.join("studentRoom");
+      console.log("Student joined studentRoom");
+    });
+
+    // Admin joins admin room (for enrollment requests)
     socket.on("joinAdmin", () => {
       socket.join("adminRoom");
       console.log("Admin joined adminRoom");

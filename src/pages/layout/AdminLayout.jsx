@@ -4,12 +4,28 @@ import AdminHeader from "../admin/components/AdminHeader";
 import AdminSidebar from "../admin/components/AdminSidebar";
 import { useDispatch } from "react-redux";
 import { getAdminProfile } from "@/Store/features/admin/admin.auth.slice";
+import socket from "@/socket/socket";
+import { toast } from "sonner";
+import { getPendingRequests } from "@/Store/features/enrollment/enrollment.slice";
 
 const AdminLayout = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAdminProfile());
+
+    // Admin joins adminRoom to receive enrollment requests
+    socket.emit("joinAdmin");
+
+    // Listen for new enrollment requests from students
+    socket.on("newEnrollmentRequest", (data) => {
+      toast.info(data.message);
+      dispatch(getPendingRequests()); // refresh pending list automatically
+    });
+
+    return () => {
+      socket.off("newEnrollmentRequest");
+    };
   }, [dispatch]);
 
   return (

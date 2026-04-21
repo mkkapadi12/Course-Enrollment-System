@@ -10,6 +10,7 @@ const initialState = {
 export const createCourse = createAsyncThunk(
   "course/createCourse",
   async (course, { rejectWithValue }) => {
+    console.log("slice:",course);
     try {
       const response = await courseAPI.createCourse(course);
       return response;

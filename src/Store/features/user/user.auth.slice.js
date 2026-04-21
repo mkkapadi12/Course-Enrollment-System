@@ -35,7 +35,6 @@ export const loginUser = createAsyncThunk(
   async (data, { rejectWithValue, dispatch }) => {
     try {
       const result = await loginUserAPI(data);
-      console.log(result);
       localStorage.setItem("usertestToken", result.token);
 
       await dispatch(getUserProfile());

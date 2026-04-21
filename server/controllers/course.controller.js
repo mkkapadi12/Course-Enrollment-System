@@ -1,7 +1,9 @@
 const asyncHandler = require("../utils/asyncHandler");
 const COURSE = require("../models/course.model");
+const { getIO } = require("../socket/socket");
 
 const createCourse = asyncHandler(async (req, res, next) => {
+  console.log("controller:", req.body);
   const { title, description, instructor, duration } = req.body;
   if (!title || !description || !instructor || !duration) {
     const error = new Error("All fields are required");
@@ -21,7 +23,16 @@ const createCourse = asyncHandler(async (req, res, next) => {
     duration,
     createdBy: req.admin.id,
   });
-  return res.status(201).json({ course });
+
+  // Notify ALL connected students in real-time
+  getIO()
+    .to("studentRoom")
+    .emit("newCourseAvailable", {
+      course,
+      message: `New course available: ${title}`,
+    });
+
+  return res.status(201).json({ msg: "Course created successfully", course });
 });
 
 const getAllCourses = asyncHandler(async (req, res, next) => {
@@ -34,6 +45,5 @@ const deleteCourse = asyncHandler(async (req, res, next) => {
   const course = await COURSE.findByIdAndDelete(id);
   return res.status(200).json({ course });
 });
-
 
 module.exports = { createCourse, getAllCourses, deleteCourse };

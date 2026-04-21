@@ -21,6 +21,7 @@ import AdminCourses from "./pages/admin/pages/AdminCourses";
 import AdminProducts from "./pages/admin/pages/AdminProducts";
 import AdminLayout from "./pages/layout/AdminLayout";
 import StudentEnrollments from "./pages/admin/pages/StudentEnrollments";
+import MyEnrollments from "./pages/student/pages/MyEnrollments";
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const App = () => {
         <Route path="/student" element={<StudentLayout />}>
           <Route index element={<StudentDashboard />} />
           <Route path="all-courses" element={<AllCourses />} />
+          <Route path="my-enrollments" element={<MyEnrollments />} />
         </Route>
       </Routes>
     </Router>

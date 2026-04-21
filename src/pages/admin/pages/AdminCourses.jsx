@@ -85,22 +85,11 @@ const AdminCourses = () => {
   const onSubmit = async (data) => {
     const toastId = toast.loading("Adding course...");
     try {
-      const formData = new FormData();
-
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      if (image) {
-        formData.append("image", image);
-      }
-
-      const result = await dispatch(createCourse(formData)).unwrap();
-      toast.success(result?.message || "Course added successfully!", {
+      const result = await dispatch(createCourse(data)).unwrap();
+      toast.success(result?.msg || "Course added successfully!", {
         id: toastId,
       });
       form.reset();
-      setImage(null);
       setIsDialogOpen(false);
     } catch (error) {
       toast.error(

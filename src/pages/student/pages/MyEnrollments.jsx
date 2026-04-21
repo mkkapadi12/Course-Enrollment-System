@@ -1,0 +1,136 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getMyEnrollments } from "@/Store/features/enrollment/enrollment.slice";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { BookOpen, Clock, CheckCircle, XCircle, Calendar, GraduationCap } from "lucide-react";
+
+const StatusIcon = ({ status }) => {
+  switch (status?.toLowerCase()) {
+    case "approved":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "rejected":
+      return <XCircle className="w-4 h-4 text-red-500" />;
+    case "pending":
+    default:
+      return <Clock className="w-4 h-4 text-yellow-500" />;
+  }
+};
+
+const StatusBadge = ({ status }) => {
+  switch (status?.toLowerCase()) {
+    case "approved":
+      return <Badge variant="outline" className="border-green-200 text-green-700 bg-green-50 dark:bg-green-900/30 dark:border-green-800 dark:text-green-400">Approved</Badge>;
+    case "rejected":
+      return <Badge variant="destructive">Rejected</Badge>;
+    case "pending":
+    default:
+      return <Badge variant="outline" className="border-yellow-200 text-yellow-700 bg-yellow-50 dark:bg-yellow-900/30 dark:border-yellow-800 dark:text-yellow-400">Pending</Badge>;
+  }
+};
+
+const MyEnrollments = () => {
+  const dispatch = useDispatch();
+  const { enrollments, loading } = useSelector((state) => state.enrollment);
+
+  useEffect(() => {
+    dispatch(getMyEnrollments());
+  }, [dispatch]);
+
+  return (
+    <div className="space-y-6 max-w-7xl mx-auto">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <GraduationCap className="h-8 w-8 text-primary" />
+          My Enrollments
+        </h1>
+        <p className="text-muted-foreground">View and track the status of your course enrollments.</p>
+      </div>
+
+      {loading ? (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Card key={i} className="animate-pulse">
+              <CardHeader className="gap-2 pb-4">
+                <div className="h-5 w-3/4 bg-muted rounded"></div>
+                <div className="h-4 w-1/2 bg-muted rounded"></div>
+              </CardHeader>
+              <CardContent className="pb-4">
+                <div className="h-8 bg-muted rounded w-full"></div>
+              </CardContent>
+              <CardFooter className="pt-4 border-t flex justify-between">
+                <div className="h-4 w-20 bg-muted rounded"></div>
+                <div className="h-6 w-16 bg-muted rounded-full"></div>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      ) : enrollments?.length > 0 ? (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {enrollments.map((enrollment) => (
+            <Card key={enrollment._id} className="flex flex-col overflow-hidden transition-all hover:shadow-md border-border/50 bg-card/50 backdrop-blur-sm">
+              <CardHeader className="pb-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-1.5 w-full">
+                    <CardTitle className="line-clamp-2 leading-tight text-lg" title={enrollment.course?.title}>
+                      {enrollment.course?.title || "Unknown Course"}
+                    </CardTitle>
+                    <CardDescription className="flex items-center gap-1.5 mt-2">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {new Date(enrollment.createdAt).toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="flex-1 pb-4">
+                {enrollment.rejectionReason && enrollment.status === "rejected" ? (
+                  <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-3 rounded-md">
+                    <span className="font-semibold block mb-1">Reason for rejection:</span> 
+                    {enrollment.rejectionReason}
+                  </div>
+                ) : (
+                  <div className="text-sm text-muted-foreground flex items-center gap-2">
+                     <GraduationCap className="w-4 h-4 opacity-50" />
+                     Course enrollment request
+                  </div>
+                )}
+              </CardContent>
+              <CardFooter className="pt-4 border-t border-border/50 bg-muted/20 flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <StatusIcon status={enrollment.status} />
+                  <span className="text-sm font-medium capitalize text-muted-foreground">
+                    {enrollment.status}
+                  </span>
+                </div>
+                <StatusBadge status={enrollment.status} />
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <Card className="flex flex-col items-center justify-center p-12 text-center border-dashed bg-card/30">
+          <div className="rounded-full bg-muted/50 p-4 mb-4 ring-1 ring-border/50">
+            <BookOpen className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <CardTitle className="mb-2 text-xl">No Enrollments Yet</CardTitle>
+          <CardDescription className="max-w-sm text-base">
+            You haven't requested enrollment in any courses yet. Browse available courses to start learning!
+          </CardDescription>
+        </Card>
+      )}
+    </div>
+  );
+};
+
+export default MyEnrollments;

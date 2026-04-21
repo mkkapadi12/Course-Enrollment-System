@@ -2,7 +2,7 @@ import privateAPI from "@/Store/services/PrivateAPI";
 
 export const enrollmentAPI = {
   enroll: async (courseId) => {
-    const response = await privateAPI.post(`/enrollments/request/${courseId}`);
+    const response = await privateAPI.post(`/enrollments/request`, { courseId });
     return response.data;
   },
   getMyEnrollments: async () => {
