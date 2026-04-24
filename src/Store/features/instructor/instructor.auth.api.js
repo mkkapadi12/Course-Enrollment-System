@@ -21,4 +21,8 @@ export const INSTRUCTOR_AUTH_API = {
     const response = await privateAPI.get("/instructor/profile");
     return response.data;
   },
+  getMyCourses: async () => {
+    const response = await privateAPI.get("/instructor/my-courses");
+    return response.data;
+  },
 };

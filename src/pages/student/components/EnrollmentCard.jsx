@@ -8,12 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  BookOpen,
-  Calendar,
-  Clock,
-  User,
-} from "lucide-react";
+import { BookOpen, Calendar, Clock, User } from "lucide-react";
 import { StatusBadge, StatusIcon } from "@/helper";
 import { Link } from "react-router-dom";
 
@@ -45,7 +40,9 @@ const EnrollmentCard = ({ enrollment }) => {
             </CardTitle>
             <CardDescription className="flex items-center gap-1.5 mt-1 text-xs">
               <Calendar className="w-3 h-3 shrink-0" />
-              {new Date(enrollment.enrolledAt || enrollment.createdAt).toLocaleDateString("en-US", {
+              {new Date(
+                enrollment.enrolledAt || enrollment.createdAt,
+              ).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
@@ -58,10 +55,12 @@ const EnrollmentCard = ({ enrollment }) => {
       <CardContent className="flex-1 px-4 pb-3">
         {/* Course meta */}
         <div className="flex items-center gap-3 mb-3">
-          {enrollment.course?.instructor && (
+          {enrollment.course?.instructor?.name && (
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <User className="h-3 w-3" />
-              <span className="truncate">{enrollment.course.instructor}</span>
+              <span className="truncate">
+                {enrollment.course?.instructor?.name}
+              </span>
             </div>
           )}
           {enrollment.course?.duration && (

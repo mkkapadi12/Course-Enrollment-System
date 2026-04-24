@@ -3,19 +3,20 @@ import { Outlet } from "react-router-dom";
 import AdminHeader from "../admin/components/AdminHeader";
 import AdminSidebar from "../admin/components/AdminSidebar";
 import { useDispatch } from "react-redux";
-
 import socket from "@/socket/socket";
 import { toast } from "sonner";
 import {
   getAllEnrollments,
   getPendingRequests,
 } from "@/Store/features/enrollment/enrollment.slice";
+import { getAllInstructor } from "@/Store/features/admin/admin.auth.slice";
 
 const AdminLayout = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllEnrollments());
+    dispatch(getAllInstructor());
 
     // Admin joins adminRoom to receive enrollment requests
     socket.emit("joinAdmin");

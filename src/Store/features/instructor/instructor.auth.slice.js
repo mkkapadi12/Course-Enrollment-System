@@ -4,6 +4,7 @@ import { INSTRUCTOR_AUTH_API } from "./instructor.auth.api";
 const initialState = {
   instructor: null,
   token: localStorage.getItem("instructortestToken") || null,
+  myCourses: [],
   loading: false,
   error: null,
 };
@@ -34,6 +35,18 @@ export const loginInstructor = createAsyncThunk(
       });
       localStorage.setItem("instructortestToken", response.token);
       await dispatch(getInstructorProfile());
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  },
+);
+
+export const getMyCourses = createAsyncThunk(
+  "instructor/getMyCourses",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await INSTRUCTOR_AUTH_API.getMyCourses();
       return response;
     } catch (error) {
       return rejectWithValue(error.response.data.message);
@@ -96,6 +109,17 @@ const instructorSlice = createSlice({
         state.instructor = action.payload.instructor;
       })
       .addCase(getInstructorProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getMyCourses.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getMyCourses.fulfilled, (state, action) => {
+        state.loading = false;
+        state.myCourses = action.payload.courses;
+      })
+      .addCase(getMyCourses.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

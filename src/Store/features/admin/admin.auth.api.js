@@ -14,3 +14,14 @@ export const getAdminProfileAPI = async () => {
   const response = await privateAPI.get("/admin/profile");
   return response.data;
 };
+
+export const getAllInstructorsAPI = async () => {
+  const response = await privateAPI.get("/admin/instructors");
+  return response.data;
+};
+
+export const getAllStudentsAPI = async () => {
+  const response = await privateAPI.get("/admin/students");
+  return response.data;
+};
+

@@ -27,6 +27,8 @@ const AllCourses = () => {
     dispatch(getAllCourses());
   }, [dispatch]);
 
+  console.log(courses);
+
   const filteredCourses = courses?.filter(
     (course) =>
       course.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||

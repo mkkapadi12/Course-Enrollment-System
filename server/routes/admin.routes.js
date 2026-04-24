@@ -6,6 +6,7 @@ const router = express.Router();
 router.post("/register", adminController.register);
 router.post("/login", adminController.login);
 router.get("/profile", adminMiddleware, adminController.profile);
-router.get("/all-students", adminMiddleware, adminController.getAllStudents);
+router.get("/students", adminMiddleware, adminController.getAllStudents);
+router.get("/instructors", adminMiddleware, adminController.getAllInstructors);
 
 module.exports = router;

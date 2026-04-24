@@ -1,4 +1,5 @@
 const INSTRUCTOR = require("../models/instructor.model");
+const COURSE = require("../models/course.model");
 
 const registerInstructor = async (req, res, next) => {
   try {
@@ -67,8 +68,23 @@ const getInstructorProfile = async (req, res, next) => {
   }
 };
 
+const getMyCourses = async (req, res, next) => {
+  try {
+    const courses = await COURSE.find({
+      instructor: req.instructorId,
+    }).select("-instructor");
+    return res.status(200).json({
+      msg: "My Courses retrieved successfully!",
+      courses,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   loginInstructor,
   registerInstructor,
   getInstructorProfile,
+  getMyCourses,
 };

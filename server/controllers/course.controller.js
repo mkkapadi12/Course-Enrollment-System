@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler");
 const COURSE = require("../models/course.model");
+const INSTRUCTOR = require("../models/instructor.model");
 const { getIO } = require("../socket/socket");
 
 //create course
@@ -32,25 +33,48 @@ const createCourse = asyncHandler(async (req, res, next) => {
       message: `New course available: ${title}`,
     });
 
+    //Notify instructors
+    getIO()
+      .to("instructorRoom")
+      .emit("assignCourse", {
+        course,
+        message: `New course assigned to you: ${title}`,
+      });
+
   return res.status(201).json({ msg: "Course created successfully", course });
 });
 
 //get all course for student side
 const getAllCourses = asyncHandler(async (req, res, next) => {
-  const courses = await COURSE.find({ isActive: true });
+  const courses = await COURSE.find({ isActive: true }).populate(
+    "instructor",
+    "name",
+  );
   return res.status(200).json({ courses });
 });
 
 //get all course for admin side
 const getAdminAllCourses = asyncHandler(async (req, res, next) => {
-  const courses = await COURSE.find();
+  const courses = await COURSE.find().populate("instructor", "name email");
   return res.status(200).json({ courses });
 });
 
 //update course
 const updateCourse = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const course = await COURSE.findByIdAndUpdate(id, req.body);
+  const { title, description, instructor, duration } = req.body;
+  const course = await COURSE.findByIdAndUpdate(
+    id,
+    {
+      title,
+      description,
+      instructor,
+      duration,
+    },
+    {
+      new: true,
+    },
+  );
   return res.status(200).json({ course });
 });
 

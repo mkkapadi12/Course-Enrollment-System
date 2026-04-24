@@ -1,5 +1,6 @@
 const USER = require("../models/user.model");
 const ADMIN = require("../models/admin.model");
+const INSTRUCTOR = require("../models/instructor.model");
 
 const register = async (req, res, next) => {
   try {
@@ -76,9 +77,23 @@ const getAllStudents = async (req, res, next) => {
   }
 };
 
+const getAllInstructors = async (req, res, next) => {
+  try {
+    const instructors = await INSTRUCTOR.find();
+
+    return res.status(200).json({
+      msg: "Instructors retrieved successfully!",
+      instructors,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   login,
   register,
   profile,
+  getAllInstructors,
   getAllStudents,
 };

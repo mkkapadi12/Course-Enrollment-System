@@ -67,17 +67,31 @@ const getEnrollmentsByStudent = async (studentId) => {
     },
     {
       $lookup: {
-        from: "courses", // MongoDB collection name (lowercase + plural)
+        from: "courses",
         localField: "course",
         foreignField: "_id",
         as: "course",
       },
     },
     {
-      $unwind: "$course", // flatten the course array
+      $unwind: "$course",
     },
     {
-      $match: { "course.isActive": true }, // now filter on course field
+      $lookup: {
+        from: "instructors",
+        localField: "course.instructor",
+        foreignField: "_id",
+        as: "course.instructor",
+      },
+    },
+    {
+      $unwind: {
+        path: "$course.instructor",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $match: { "course.isActive": true },
     },
     {
       $project: {
@@ -88,9 +102,10 @@ const getEnrollmentsByStudent = async (studentId) => {
         createdAt: 1,
         "course.title": 1,
         "course.description": 1,
-        "course.instructor": 1,
+        "course.instructor.name": 1,
+        "course.instructor.email": 1,
         "course.duration": 1,
-        "course._id":1
+        "course._id": 1,
       },
     },
     {

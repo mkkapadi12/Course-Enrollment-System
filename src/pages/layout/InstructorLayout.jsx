@@ -3,14 +3,26 @@ import { Outlet } from "react-router-dom";
 import InstructorHeader from "../instructor/components/InstructorHeader";
 import InstructorSidebar from "../instructor/components/InstructorSidebar";
 import socket from "@/socket/socket";
+import { useDispatch } from "react-redux";
+import { getMyCourses } from "@/Store/features/instructor/instructor.auth.slice";
+import { toast } from "sonner";
 
 const InstructorLayout = () => {
+  const dispatch = useDispatch();
   useEffect(() => {
     // Instructor joins instructorRoom to receive notifications
     socket.emit("joinInstructor");
+    dispatch(getMyCourses());
 
-    return () => {};
-  }, []);
+    socket.on("assignCourse", ({ message }) => {
+      toast.success(message);
+      dispatch(getMyCourses());
+    });
+
+    return () => {
+      socket.off("assignCourse");
+    };
+  }, [dispatch]);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground font-sans">

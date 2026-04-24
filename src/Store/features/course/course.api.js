@@ -2,7 +2,6 @@ import privateAPI from "@/Store/services/PrivateAPI";
 
 export const courseAPI = {
   createCourse: async (course) => {
-    console.log("api:", course);
     const response = await privateAPI.post("/courses/create", course);
     return response.data;
   },

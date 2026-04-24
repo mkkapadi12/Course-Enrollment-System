@@ -48,6 +48,7 @@ const getMyEnrollments = asyncHandler(async (req, res) => {
   const enrollments = await enrollmentService.getEnrollmentsByStudent(
     req.user._id,
   );
+
   return res.status(200).json({ enrollments });
 });
 

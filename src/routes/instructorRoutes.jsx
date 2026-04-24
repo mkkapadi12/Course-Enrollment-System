@@ -1,3 +1,4 @@
+import MyAssignedCourses from "@/pages/instructor/pages/MyAssignedCourses";
 import InstructorLogin from "../pages/instructor/Auth/InstructorLogin";
 import InstructorRegister from "../pages/instructor/Auth/InstructorRegister";
 import InstructorDashboard from "../pages/instructor/pages/InstructorDashboard";
@@ -15,6 +16,7 @@ const instructorRoutes = [
         element: <InstructorLayout />,
         children: [
           { index: true, element: <InstructorDashboard /> },
+          { path: "courses", element: <MyAssignedCourses /> },
         ],
       },
     ],

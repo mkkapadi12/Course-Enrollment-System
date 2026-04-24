@@ -25,6 +25,12 @@ const navItems = [
     icon: LayoutDashboard,
     description: "Overview & metrics",
   },
+  {
+    title: "My Courses",
+    path: "/instructor/courses",
+    icon: BookOpen,
+    description: "Courses created by you",
+  }
 ];
 
 const InstructorSidebarNav = ({ onNavigate }) => {

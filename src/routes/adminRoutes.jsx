@@ -5,6 +5,7 @@ import AdminCourses from "../pages/admin/pages/AdminCourses";
 import AdminLayout from "../pages/layout/AdminLayout";
 import PendingRequests from "../pages/admin/pages/PendingRequests";
 import AdminEnrollments from "../pages/admin/pages/AdminEnrollments";
+import AdminInstructors from "../pages/admin/pages/AdminInstructors";
 import PrivateAdmin from "../private/PrivateAdmin";
 
 const adminRoutes = [
@@ -21,6 +22,7 @@ const adminRoutes = [
           { path: "all-courses", element: <AdminCourses /> },
           { path: "pending-requests", element: <PendingRequests /> },
           { path: "enrollments", element: <AdminEnrollments /> },
+          { path: "instructors", element: <AdminInstructors /> },
         ],
       },
     ],

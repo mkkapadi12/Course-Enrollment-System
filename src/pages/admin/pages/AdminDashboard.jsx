@@ -6,6 +6,7 @@ import { getAllProducts } from "@/Store/features/product/admin.product.slice";
 import StatCard from "../components/StatCard";
 import { Link } from "react-router-dom";
 import { ADMIN_ICONS } from "@/lib/icons/admin.icons";
+import { Sparkles } from "lucide-react";
 
 const AdminDashboard = () => {
   const { admin, loading: adminLoading } = useSelector((state) => state.admin);
@@ -47,20 +48,23 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-8">
-      {/* Page Header */}
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            Welcome back, {admin?.name || "Administrator"}
+      {/* Welcome Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-gray-900 via-gray-800 to-gray-700 p-6 sm:p-8 text-white shadow-lg">
+        <div className="relative z-10">
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="h-4 w-4 text-yellow-400" />
+            <span className="text-sm font-medium text-gray-300">
+              Welcome back
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            {admin?.name || "Administrator"}! 👋
           </h1>
-          <span className="text-2xl sm:text-3xl" role="img" aria-label="wave">
-            👋
-          </span>
+          <p className="text-gray-400 mt-2 text-sm sm:text-base max-w-md">
+            Here's what's happening with your platform today. Monitor key
+            metrics and take action on important items.
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground max-w-xl">
-          Here's what's happening with your platform today. Monitor key metrics
-          and take action on important items.
-        </p>
       </div>
 
       {/* Stats Grid */}

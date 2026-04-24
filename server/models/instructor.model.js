@@ -22,13 +22,6 @@ const instructorSchema = new mongoose.Schema(
     profilePicture: {
       type: String,
     },
-
-    courses: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Course",
-      },
-    ],
   },
   { timestamps: true },
 );

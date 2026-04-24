@@ -58,7 +58,7 @@ const CourseCard = ({
         <div className="flex items-center gap-3 mb-2">
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <User className="h-3 w-3" />
-            <span className="truncate">{course.instructor || "Instructor"}</span>
+            <span className="truncate">{course.instructor?.name || "Instructor"}</span>
           </div>
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Clock className="h-3 w-3" />

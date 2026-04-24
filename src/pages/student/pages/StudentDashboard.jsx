@@ -52,9 +52,6 @@ const StudentDashboard = () => {
             overview.
           </p>
         </div>
-        {/* Decorative blob */}
-        <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-white/5 blur-2xl" />
-        <div className="absolute right-10 bottom-0 h-32 w-32 rounded-full bg-white/5 blur-xl" />
       </div>
 
       {/* Stats Grid */}

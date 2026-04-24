@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   getAdminProfileAPI,
+  getAllInstructorsAPI,
   loginAdminAPI,
   registerAdminAPI,
 } from "./admin.auth.api";
@@ -8,6 +9,8 @@ import {
 const initialState = {
   admin: null,
   token: localStorage.getItem("admintestToken") || null,
+  instructors: [],
+  students: [],
   loading: false,
   error: null,
 };
@@ -64,6 +67,23 @@ export const getAdminProfile = createAsyncThunk(
   },
 );
 
+//GET ALL INSTRUCTOR
+export const getAllInstructor = createAsyncThunk(
+  "adminAuth/getAllInstructor",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getAllInstructorsAPI();
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to fetch instructors",
+      );
+    }
+  },
+);
+
 const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -110,6 +130,17 @@ const adminSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         // localStorage.removeItem("admintestToken");
+      })
+      .addCase(getAllInstructor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllInstructor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.instructors = action.payload.instructors;
+      })
+      .addCase(getAllInstructor.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
